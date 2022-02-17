@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Контакты</title>
+    <meta charset="utf-8" />
+</head>
+
+<body>
+    <h1>Контакты</h1>
+    <p>Электронный адрес: admin@mycorp.com</p>
+
+    <div>
+        {{#each users}}
+            <div>{{this.name}}</div>
+            
+            <div>{{@index}} </div>
+            <a href="/user/{{@index}}">Go to user details</a>
+        {{/each}}
+    </div>
+</body>
+<html>
