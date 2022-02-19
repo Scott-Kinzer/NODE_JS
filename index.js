@@ -1,55 +1,74 @@
 
-
-const express = require("express");
-const req = require("express/lib/request");
-const {users} = require("./data");
- 
+const express = require('express');
+let {users} = require('./data');
 const app = express();
+const path = require('path');
 
-app.listen(3000, () => {
-    console.log('Server is running');
+app.listen(3005, () => {
+    console.log('Server is running port 3005');
 });
- 
 
+app.set('view engine', 'hbs');
+app.set('views', path.join(__dirname, 'views'));
 
-app.set("view engine", "hbs");
 app.use(express.json());
 
 const urlencodedParser = express.urlencoded({extended: false});
 
+const cors = require('cors')
+app.use(cors())
 
-app.use("/login", function(_, response){
-    response.render("login.hbs");
+app.get('/login', function(_, response){
+    response.render("login");
 });
 
-app.use("/error_page", function(_, response){
-    response.render("error_page.hbs");
+app.get("/error_page", function(_, response){
+    response.render("error_page");
 });
 
-app.use("/users", function(_, response){
-    response.render("users.hbs", {users: users});
+app.get("/users", function(_, response){
+    response.render("users", {users: users});
+});
+
+app.get('/signIn', function(_, response){
+    response.render("sign");
 });
 
 
-app.use("/user/:id", function(req, response){
-    console.log("WORK?");
+app.get('/user/:id', function(req, response){
     const idUser = req.params.id;
-    console.log("ID", idUser);
     const user = users.find((_, i) => i == +idUser );
-    console.log(user);
-    response.render("user.hbs", {user: user});
+    response.render("user", {user: user});
 });
 
-app.post("/", urlencodedParser, function (request, response) {
-    if(!request.body) return response.sendStatus(400);
+app.post('/', urlencodedParser, function (request, response) {
     const emailExist = users.find((user) => user.email === request.body.email);
-    console.log('email exs', emailExist);
+
     if (emailExist) {
-        response.redirect("/error_page");
+        response.render('error_page', {error: "Email already exist"});
         
     } else {
         users.push(request.body);
-        response.redirect("/users");
+        response.redirect('/users');
+    }
+    
+});
+app.post('/usersDel', (request, response) => {
+    users = users.filter(user => +user.id !== +JSON.parse(request.body.id))
+    response.send();
+})
+
+app.post('/signForm', urlencodedParser, function (request, response) {
+    if(!request.body) return response.sendStatus(400);
+    const userEmailExist = users.find((user) => user.email === request.body.email);
+    const userPasswordExist = users.find((user) => user.password === request.body.password);
+
+
+    if (userEmailExist && userPasswordExist) {
+        response.render('user', {user: userEmailExist});
+        
+    } else {
+        response.render('error_page', {error: 'Wrong email or wrond password'});
     }
     
 });
