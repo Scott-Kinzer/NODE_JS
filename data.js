@@ -1,4 +1,4 @@
- const users = [
+ let users = [
     {name: "Sasha",
     id: 1,
     surname: "Karpiv",
