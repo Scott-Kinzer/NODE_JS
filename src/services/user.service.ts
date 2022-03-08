@@ -16,6 +16,7 @@ class UserService {
 
     public async findUserByEmail(email: any) {
         const findedUser = await userRepository.findUserByEmailRepo(email);
+        console.log(findedUser);
         return findedUser;
     }
 

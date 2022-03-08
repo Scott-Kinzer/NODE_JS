@@ -8,7 +8,7 @@ class UserRepository extends Repository<User> {
     }
 
     public async findUserByEmailRepo(email: any): Promise<any> {
-        return getManager().getRepository(User).find(
+        return getManager().getRepository(User).findOne(
             { email },
         );
     }
