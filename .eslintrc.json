@@ -16,12 +16,13 @@
     ],
     "rules": {
         "indent": ["error", 4],
-        // "class-methods-use-this": ["error", { "expectMethods": ["up", "down"] }],
+        "class-methods-use-this": "off",
         "import/prefer-default-export": "off",
         "import/extensions": ["error", {
             "js": "never", 
             "ts": "never"
-        }]
+        }],
+        "no-underscore-dangle": "off"
      
     },
     "settings": {

@@ -1,14 +1,18 @@
+/* eslint-disable no-console */
 import express, { Request, Response } from 'express';
 import 'reflect-metadata';
 import { createConnection, getManager } from 'typeorm';
 import { Comment } from './entity/comments.entity';
 import { Post } from './entity/post.entity';
 import { User } from './entity/user.entity';
+import { apiRouter } from './routes/api.router';
 
 const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded());
+
+app.use(apiRouter);
 
 app.get('/users', async (req: Request, res: Response) => {
     const users = await getManager().getRepository(User).find({
@@ -72,10 +76,10 @@ app.patch('/comments/dislike', async (req: Request, res: Response) => {
     }
 });
 
-app.post('/users', async (req: Request, res: Response) => {
-    const users = await getManager().getRepository(User).save(req.body);
-    res.json(users);
-});
+// app.post('/users', async (req: Request, res: Response) => {
+//     const users = await getManager().getRepository(User).save(req.body);
+//     res.json(users);
+// });
 
 app.patch('/users/:id', async (req: Request, res: Response) => {
     const { password, email } = req.body;
